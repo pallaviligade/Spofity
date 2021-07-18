@@ -18,6 +18,7 @@ class AuthViewController: UIViewController,WKNavigationDelegate {
         let webview = WKWebView(frame: .zero, configuration: config)
         return webview
     }()
+    
     public var complicationHandler:((Bool) -> Void)?
     
     override func viewDidLoad() {
@@ -46,6 +47,14 @@ class AuthViewController: UIViewController,WKNavigationDelegate {
             return
         }
         print("code:\(code)")
+        webview.isHidden = true
+        AuthManager.shared.exchangeAccessToken(code: code) { [weak self] sucess in
+            DispatchQueue.main.async {
+                self?.navigationController?.popViewController(animated: true)
+                self?.complicationHandler?(sucess)
+            }
+           
+        }
     }
     
 

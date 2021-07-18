@@ -27,6 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window.makeKeyAndVisible()
     self.window = window
     print(AuthManager.shared.signInurl?.absoluteString)
+    AuthManager.shared.refershIfNeeded { sucess in
+        print(sucess)
+    }
         return true
     }
 

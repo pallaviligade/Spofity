@@ -32,6 +32,7 @@
 		8E11BF20269E4715004492DA /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E11BF1F269E4715004492DA /* Artist.swift */; };
 		8E11BF22269E471E004492DA /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E11BF21269E471E004492DA /* UserProfile.swift */; };
 		8E11BF24269F8AC1004492DA /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E11BF23269F8AC1004492DA /* Extension.swift */; };
+		8E11BF2626A0F626004492DA /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E11BF2526A0F626004492DA /* AuthResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		8E11BF1F269E4715004492DA /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		8E11BF21269E471E004492DA /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		8E11BF23269F8AC1004492DA /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		8E11BF2526A0F626004492DA /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,6 +249,7 @@
 				8E11BF1D269E4701004492DA /* AudioTrack.swift */,
 				8E11BF1F269E4715004492DA /* Artist.swift */,
 				8E11BF21269E471E004492DA /* UserProfile.swift */,
+				8E11BF2526A0F626004492DA /* AuthResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 				8E11BEFF269BA7FC004492DA /* HomeViewController.swift in Sources */,
 				8E11BF0B269E4610004492DA /* SettingsViewController.swift in Sources */,
 				8E11BF15269E4697004492DA /* AuthManager.swift in Sources */,
+				8E11BF2626A0F626004492DA /* AuthResponse.swift in Sources */,
 				8E11BF11269E465D004492DA /* PlaylistViewController.swift in Sources */,
 				8E11BF24269F8AC1004492DA /* Extension.swift in Sources */,
 				8E11BEFD269BA7DC004492DA /* TabBarViewController.swift in Sources */,
