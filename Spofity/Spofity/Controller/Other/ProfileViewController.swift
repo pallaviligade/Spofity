@@ -12,7 +12,20 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        title = "Profile"
+        
+        APIManager.shared.getcurrentUserProfile { result in
+            switch result{
+                case .success(let model):
+                  break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    break
+                
+            }
+        }
+
+
     }
     
 

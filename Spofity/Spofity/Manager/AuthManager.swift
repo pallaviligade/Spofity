@@ -16,7 +16,7 @@ final class AuthManager{
        static let scopes = "user-read-private%20playlist-modify-public%20playlist-modify-private%20playlist-read-private%20playlist-read-collaborative%20user-follow-modify%20user-follow-read%20user-library-modify%20user-library-read%20user-read-email"
 
     }
-    
+    private var refershingToken:Bool = false
     public var signInurl:URL?{
       
         let base = "https://accounts.spotify.com/authorize"
@@ -100,7 +100,32 @@ final class AuthManager{
         
         
     }
+    private var onrefershingblock = [((String) -> Void)]()
+    // supplies valid token with used API calls
+    
+    public func withValidtoken(complication:@escaping(String)-> Void){
+        guard !refershingToken else {
+            onrefershingblock.append(complication)
+            return
+        }
+        
+        if shouldrefreshToken{
+            // refresh
+            refershIfNeeded { [weak self] sucess in
+                if let token = self?.accessToken,sucess {
+                    complication(token)
+                }
+            }
+        }
+        else if let token = accessToken {
+            complication(token)
+            
+        }
+    }
+   
     public func refershIfNeeded(complication:@escaping (Bool) -> Void){
+        
+        guard !refershingToken else{return}
         guard shouldrefreshToken else{
             complication(true)
             return
@@ -110,11 +135,13 @@ final class AuthManager{
         }
         
         guard let url = URL(string: Constants.tokenapicall) else {return}
+        
+        refershingToken = true
+        
         var componts = NSURLComponents()
         componts.queryItems = [
             URLQueryItem(name: "grant_type", value: "refresh_token"),
             URLQueryItem(name: "refresh_token", value: refershToken)
-        
         ]
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -131,6 +158,7 @@ final class AuthManager{
         request.setValue("Basic \(base64token)", forHTTPHeaderField: "Authorization")
         
        let task = URLSession.shared.dataTask(with: request) {[weak self] data, _, error in
+        self?.refershingToken = false
             guard let data = data , error == nil else{
                 complication(false)
                 return
@@ -139,6 +167,8 @@ final class AuthManager{
          //   let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
            let json = try JSONDecoder().decode(AuthResponse.self, from: data)
             print("Sucessfuly refersh token")
+            self?.onrefershingblock.forEach({ $0(json.access_token) })
+            self?.onrefershingblock.removeAll()
             self?.catchToken(authResponse:json)
             print("Sucess:\(json)")
             complication(true)
