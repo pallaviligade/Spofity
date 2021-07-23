@@ -33,6 +33,7 @@
 		8E11BF22269E471E004492DA /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E11BF21269E471E004492DA /* UserProfile.swift */; };
 		8E11BF24269F8AC1004492DA /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E11BF23269F8AC1004492DA /* Extension.swift */; };
 		8E11BF2626A0F626004492DA /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E11BF2526A0F626004492DA /* AuthResponse.swift */; };
+		8E23D57526AA32E700505896 /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E23D57426AA32E700505896 /* settings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		8E11BF21269E471E004492DA /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		8E11BF23269F8AC1004492DA /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		8E11BF2526A0F626004492DA /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
+		8E23D57426AA32E700505896 /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,6 +252,7 @@
 				8E11BF1F269E4715004492DA /* Artist.swift */,
 				8E11BF21269E471E004492DA /* UserProfile.swift */,
 				8E11BF2526A0F626004492DA /* AuthResponse.swift */,
+				8E23D57426AA32E700505896 /* settings.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 				8E11BF1C269E46F6004492DA /* Playlist.swift in Sources */,
 				8E11BF07269BA885004492DA /* AuthViewController.swift in Sources */,
 				8E11BF13269E4678004492DA /* SerachResultViewController.swift in Sources */,
+				8E23D57526AA32E700505896 /* settings.swift in Sources */,
 				8E11BEC5269B9EA6004492DA /* AppDelegate.swift in Sources */,
 				8E11BEC7269B9EA6004492DA /* SceneDelegate.swift in Sources */,
 				8E11BF20269E4715004492DA /* Artist.swift in Sources */,

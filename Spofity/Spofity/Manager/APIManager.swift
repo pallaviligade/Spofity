@@ -30,7 +30,7 @@ final class APIManager {
                 do{
                    // let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     let json = try JSONDecoder().decode(UserProfile.self, from: data)
-                    print(json)
+                    complication(.success(json))
                 }catch{
                     print(error.localizedDescription)
                     complication(.failure(error))
@@ -55,7 +55,7 @@ final class APIManager {
             var request = URLRequest(url: apiURL)
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             request.httpMethod = type.rawValue
-            request.timeoutInterval = 30
+            request.timeoutInterval = 3600
             complication(request)
             
         }
