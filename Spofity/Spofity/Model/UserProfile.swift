@@ -15,13 +15,10 @@ struct UserProfile:Codable {
     //let followers : [String:Codable?]
     let href:String
     let id : String
-    let images : [UserImage]
+    let images : [APIImage]
     let product : String
   
 }
-struct UserImage: Codable {
-    let height : String
-    let url : String
-}
+
 
    

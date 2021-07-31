@@ -36,7 +36,11 @@ class TabBarViewController: UITabBarController {
         nav2.tabBarItem = UITabBarItem(title: "Search", image:UIImage(systemName: "magnifyingglass"), tag: 2)
         nav3.tabBarItem = UITabBarItem(title: "Liabary", image:UIImage(systemName: "music.note.list"), tag: 3)
 
+        nav1.navigationBar.tintColor = .label
+        nav2.navigationBar.tintColor = .label
+        nav3.navigationBar.tintColor = .label
 
+        
         setViewControllers([nav1,nav2,nav3], animated: true)
 
 

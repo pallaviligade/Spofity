@@ -123,11 +123,11 @@ final class AuthManager{
         }
     }
    
-    public func refershIfNeeded(complication:@escaping (Bool) -> Void){
+    public func refershIfNeeded(complication:((Bool) -> Void)?){
         
         guard !refershingToken else{return}
         guard shouldrefreshToken else{
-            complication(true)
+            complication?(true)
             return
         }
         guard let refershToken = self.refershToken else{
@@ -151,7 +151,7 @@ final class AuthManager{
         let basicToken = Constants.ClientID + ":" + Constants.ClientSecretID
         let data = basicToken.data(using: .utf8)
         guard let base64token = data?.base64EncodedString() else {
-            complication(false)
+            complication?(false)
             return
             
         }
@@ -160,7 +160,7 @@ final class AuthManager{
        let task = URLSession.shared.dataTask(with: request) {[weak self] data, _, error in
         self?.refershingToken = false
             guard let data = data , error == nil else{
-                complication(false)
+                complication?(false)
                 return
             }
         do {
@@ -171,10 +171,10 @@ final class AuthManager{
             self?.onrefershingblock.removeAll()
             self?.catchToken(authResponse:json)
             print("Sucess:\(json)")
-            complication(true)
+            complication?(true)
         } catch  {
             print(error.localizedDescription)
-            complication(false)
+            complication?(false)
         }
         }
         task.resume()

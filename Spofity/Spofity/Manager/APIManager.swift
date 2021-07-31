@@ -19,6 +19,98 @@ final class APIManager {
     {
         case failedToGetData
     }
+    public func getrecommendations(geners:Set<String>,complication:@escaping ((Result<RecimmendationResponse,Error>))-> Void){
+        let  seeds = geners.joined(separator: ",")
+       
+        createRequest(with: URL(string: constant.baseAPIurl + "/recommendations?seed_genres=\(seeds)?limit=40"), type: .GET) { request in
+            print(request.url?.absoluteString)
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data , error == nil else {
+                    complication(.failure(APIError.failedToGetData))
+                    return
+                }
+                do{
+                    let json = try JSONDecoder().decode(RecimmendationResponse.self, from: data)
+
+               // let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                print(json)
+                    complication(.success(json))
+
+                }catch{
+                    print(error.localizedDescription)
+                    //complication(.failure(error))
+                }
+            }
+            task.resume()
+        }
+    }
+  public func getRecommendationGenres(complication:@escaping ((Result<RecommendationGenresResponse,Error>))-> Void){
+        createRequest(with: URL(string: constant.baseAPIurl + "/recommendations/available-genre-seeds"), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data , error == nil else {
+                    complication(.failure(APIError.failedToGetData))
+                    return
+                }
+                do{
+                //let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    let json = try JSONDecoder().decode(RecommendationGenresResponse.self, from: data)
+                print(json)
+                    complication(.success(json))
+                }catch{
+                    print(error.localizedDescription)
+                    complication(.failure(error))
+                }
+            }
+            task.resume()
+        }
+    }
+    public func getFeaturedPlaylist(complication:@escaping ((Result<FeaturedPlaylistResponse,Error>)) -> Void){
+        createRequest(with: URL(string:constant.baseAPIurl + "/browse/featured-playlists?limit=2"), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data , error == nil else {
+                    complication(.failure(APIError.failedToGetData))
+                    return
+                }
+                do{
+                  //  let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    let json = try JSONDecoder().decode(FeaturedPlaylistResponse.self, from: data)
+                    print(json)
+                    complication(.success(json))
+
+                }catch{
+                    print(error.localizedDescription)
+                    complication(.failure(error))
+                    
+                }
+            }
+            task.resume()
+        }
+        
+    }
+    public func getNewRelease(complication:@escaping ((Result<NewRealseResponse,Error>)) -> Void) {
+        let str = constant.baseAPIurl + "/browse/new-releases?limit=2"
+        createRequest(with: URL(string: str), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data , error == nil else {
+                    complication(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do {
+                  // let result = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    let result = try JSONDecoder().decode(NewRealseResponse.self, from: data)
+                    print(result)
+                    complication(.success(result))
+                }catch{
+                    print(error.localizedDescription)
+                    complication(.failure(error))
+
+                }
+            }
+            task.resume()
+        }
+        
+    }
     public func getcurrentUserProfile(complication: @escaping (Result<UserProfile, Error>)-> Void)
     {
         createRequest(with:URL (string: constant.baseAPIurl + "/me"), type: .GET) { baseRequest in
