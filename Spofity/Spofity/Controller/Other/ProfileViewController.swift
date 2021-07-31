@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SDWebImage
 class ProfileViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
    
     
@@ -66,11 +66,26 @@ class ProfileViewController: UIViewController ,UITableViewDelegate,UITableViewDa
         models.append("User ID :\(Model.id)")
         models.append("Plan :\(Model.product)")
 
-
+        createTableHeader(with:Model.images.first?.url)
         tableview.reloadData()
         
     }
-    
+    private func createTableHeader(with string:String?){
+        guard let urlstring = string, let url = URL(string: urlstring) else {
+            return
+            
+        }
+        
+        let headerview = UIView(frame: CGRect(x: 0, y: 0, width: view.width, height: view.width/1.5))
+        let imagesize : CGFloat = headerview.height/2
+        let imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: imagesize, height: imagesize))
+        headerview.addSubview(imageview)
+        imageview.contentMode = .scaleAspectFit
+        imageview.sd_setImage(with: url, completed: nil)
+        imageview.layer.masksToBounds = true
+        imageview.layer.cornerRadius = imagesize/2
+        tableview.tableHeaderView = headerview
+    }
     private func failedTogetProfile(){
         tableview.isHidden = true
 
