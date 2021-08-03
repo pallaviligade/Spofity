@@ -7,6 +7,11 @@
 
 import UIKit
 
+enum BrowsSectionType {
+    case newRelease
+    case featuredPlaylist
+    case recommendedTrack
+}
 class HomeViewController: UIViewController {
     
     private var collectionView:UICollectionView = UICollectionView(
@@ -45,19 +50,13 @@ class HomeViewController: UIViewController {
         collectionView.backgroundColor = .systemBackground
     }
     
-    private static func createSectionLayout(section:Int) -> NSCollectionLayoutSection{
-      // item
-        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
-        // group
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(120)), subitem: item, count: 1)
-        // section
-        let section = NSCollectionLayoutSection(group: group)
-        return section
-    }
+  
     
   private func fecthData(){
-    // Featured playlist,Recommended tracks,new release
+    // new release
+    // Featured playlist,
+   // Recommended tracks,
+    
     APIManager.shared.getRecommendationGenres { result in
         switch result{
             case .success(let model):
@@ -95,14 +94,75 @@ class HomeViewController: UIViewController {
 }
 extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return 5
     }
-    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 3
+    }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath)
-        cell.backgroundColor = .systemGreen
+        if indexPath.section == 0{
+            cell.backgroundColor = .systemGreen
+        }
+        else if indexPath.section == 1 {
+            cell.backgroundColor = .systemGray
+
+        }
+        else if indexPath.section == 2 {
+            cell.backgroundColor = .systemOrange
+
+        }
         return cell
     }
     
-    
+     static func createSectionLayout(section:Int) -> NSCollectionLayoutSection{
+        switch section {
+            case 0:
+                // item
+                  let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+                  item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+                  // Verticalgroup inside horiztal group
+                  let Verticalgroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(390)), subitem: item, count: 3)
+                  let Horizontallgroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .absolute(390)), subitem: Verticalgroup, count: 1)
+                  // section
+                  let section = NSCollectionLayoutSection(group: Horizontallgroup)
+                  section.orthogonalScrollingBehavior = .groupPaging
+                  return section
+            case 1:
+                // item
+                  let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(250), heightDimension: .absolute(250)))
+                  item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+                  // Verticalgroup inside horiztal group
+                  
+                
+              let Verticalgroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(200), heightDimension: .absolute(400)), subitem: item, count: 2)
+                
+                let Horizontallgroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(250), heightDimension: .absolute(400)), subitem: Verticalgroup, count: 1)
+                  // section
+                  let section = NSCollectionLayoutSection(group: Horizontallgroup)
+                  section.orthogonalScrollingBehavior = .groupPaging
+                  return section
+            case 2:
+                // item
+                  let item = NSCollectionLayoutItem(
+                    layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+                  item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+                
+                
+                  let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60)), subitem: item, count: 1)
+                  // section
+                
+                  let section = NSCollectionLayoutSection(group: group)
+                  return section
+            default:
+                // item
+                  let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+                  item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+                  let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(390)), subitem: item, count: 1)
+                 
+                  // section
+                  let section = NSCollectionLayoutSection(group: group)
+                  return section
+        }
+    }
 }
