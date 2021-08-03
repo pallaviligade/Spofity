@@ -23,7 +23,6 @@ final class APIManager {
         let  seeds = geners.joined(separator: ",")
        
         createRequest(with: URL(string: constant.baseAPIurl + "/recommendations?seed_genres=\(seeds)?limit=40"), type: .GET) { request in
-            print(request.url?.absoluteString)
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let data = data , error == nil else {
                     complication(.failure(APIError.failedToGetData))
@@ -33,11 +32,12 @@ final class APIManager {
                     let json = try JSONDecoder().decode(RecimmendationResponse.self, from: data)
 
                // let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                print(json)
                     complication(.success(json))
 
                 }catch{
                     print(error.localizedDescription)
+                    debugPrint(error)
+
                     //complication(.failure(error))
                 }
             }
@@ -54,10 +54,11 @@ final class APIManager {
                 do{
                 //let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     let json = try JSONDecoder().decode(RecommendationGenresResponse.self, from: data)
-                print(json)
                     complication(.success(json))
                 }catch{
                     print(error.localizedDescription)
+                    debugPrint(error)
+
                     complication(.failure(error))
                 }
             }
@@ -65,7 +66,7 @@ final class APIManager {
         }
     }
     public func getFeaturedPlaylist(complication:@escaping ((Result<FeaturedPlaylistResponse,Error>)) -> Void){
-        createRequest(with: URL(string:constant.baseAPIurl + "/browse/featured-playlists?limit=2"), type: .GET) { request in
+        createRequest(with: URL(string:constant.baseAPIurl + "/browse/featured-playlists?limit=8"), type: .GET) { request in
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let data = data , error == nil else {
                     complication(.failure(APIError.failedToGetData))
@@ -73,11 +74,13 @@ final class APIManager {
                 }
                 do{
                   //  let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                    let json = try JSONDecoder().decode(FeaturedPlaylistResponse.self, from: data)
-                    print(json)
+                   let json = try JSONDecoder().decode(FeaturedPlaylistResponse.self, from: data)
+                   // print(json)
                     complication(.success(json))
 
                 }catch{
+                    debugPrint(error)
+                    print(error as Any)
                     print(error.localizedDescription)
                     complication(.failure(error))
                     
@@ -88,7 +91,7 @@ final class APIManager {
         
     }
     public func getNewRelease(complication:@escaping ((Result<NewRealseResponse,Error>)) -> Void) {
-        let str = constant.baseAPIurl + "/browse/new-releases?limit=2"
+        let str = constant.baseAPIurl + "/browse/new-releases?limit=8"
         createRequest(with: URL(string: str), type: .GET) { request in
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let data = data , error == nil else {
@@ -99,10 +102,11 @@ final class APIManager {
                 do {
                   // let result = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     let result = try JSONDecoder().decode(NewRealseResponse.self, from: data)
-                    print(result)
                     complication(.success(result))
                 }catch{
                     print(error.localizedDescription)
+                    debugPrint(error)
+
                     complication(.failure(error))
 
                 }
@@ -125,6 +129,8 @@ final class APIManager {
                     complication(.success(json))
                 }catch{
                     print(error.localizedDescription)
+                    debugPrint(error)
+
                     complication(.failure(error))
                 }
                 

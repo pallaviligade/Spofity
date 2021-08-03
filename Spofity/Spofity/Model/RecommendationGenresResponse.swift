@@ -7,5 +7,5 @@
 
 import Foundation
 struct RecommendationGenresResponse:Codable {
-    let genres:[String]
+    let genres:[String]?
 }

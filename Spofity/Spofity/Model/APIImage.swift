@@ -7,6 +7,6 @@
 
 import Foundation
 struct APIImage: Codable {
-    let height : Int
-    let url : String
+    let height : Int?
+    let url : String?
 }
