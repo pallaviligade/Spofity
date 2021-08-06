@@ -66,16 +66,16 @@ final class APIManager {
         }
     }
     public func getFeaturedPlaylist(complication:@escaping ((Result<FeaturedPlaylistResponse,Error>)) -> Void){
-        createRequest(with: URL(string:constant.baseAPIurl + "/browse/featured-playlists?limit=8"), type: .GET) { request in
+        createRequest(with: URL(string:constant.baseAPIurl + "/browse/featured-playlists?limit=20"), type: .GET) { request in
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let data = data , error == nil else {
                     complication(.failure(APIError.failedToGetData))
                     return
                 }
                 do{
-                  //  let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                   //let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                    let json = try JSONDecoder().decode(FeaturedPlaylistResponse.self, from: data)
-                   // print(json)
+                    print(json)
                     complication(.success(json))
 
                 }catch{

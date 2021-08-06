@@ -54,6 +54,8 @@ class NewRelaseCollectionViewCell: UICollectionViewCell {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
+        backgroundColor = .secondarySystemBackground
+
         let imageSize:CGFloat = contentView.height - 10
 
         let albumlabelSize = albumNameLabel.sizeThatFits(CGSize(width: contentView.width - imageSize - 10, height: contentView.height - 10))
