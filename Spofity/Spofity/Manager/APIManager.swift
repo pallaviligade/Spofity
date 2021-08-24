@@ -19,9 +19,57 @@ final class APIManager {
     {
         case failedToGetData
     }
+    // MARK : To Album
+    public func getAlbumDetails(for album:Album,complication:@escaping (Result<AlbumDetailsResponse,Error>) -> Void)
+    {
+        createRequest(with: URL(string: constant.baseAPIurl + "/albums/" + album.id), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data , error == nil else{
+                    complication(.failure(APIError.failedToGetData))
+                    return
+                }
+                do{
+                    // let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    //print(json)
+                    let json = try JSONDecoder().decode(AlbumDetailsResponse.self, from: data)
+                    complication(.success(json))
+                }catch{
+                    print(error)
+                    complication(.failure(error))
+                }
+            }
+            task.resume()
+        }
+        
+    }
+    
+    // MARK : To playlist details
+    public func getPlaylistDetails(for playlist:Playlist,complication:@escaping (Result<PlaylistdetailsResponse,Error>) -> Void)
+    {
+        createRequest(with: URL(string: constant.baseAPIurl + "/playlists/" + playlist.id), type: .GET) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data , error == nil else{
+                    complication(.failure(APIError.failedToGetData))
+                    return
+                }
+                do{
+                    //let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    //print(json)
+                        let json = try JSONDecoder().decode(PlaylistdetailsResponse.self, from: data)
+                     complication(.success(json))
+                }catch{
+                    complication(.failure(error))
+                }
+            }
+            task.resume()
+        }
+        
+    }
+    
+    // MARK : To get seeds from gerner
     public func getrecommendations(geners:Set<String>,complication:@escaping ((Result<RecimmendationResponse,Error>))-> Void){
         let  seeds = geners.joined(separator: ",")
-       
+        
         createRequest(with: URL(string: constant.baseAPIurl + "/recommendations?seed_genres=\(seeds)?limit=40"), type: .GET) { request in
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let data = data , error == nil else {
@@ -30,21 +78,19 @@ final class APIManager {
                 }
                 do{
                     let json = try JSONDecoder().decode(RecimmendationResponse.self, from: data)
-
-               // let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     complication(.success(json))
-
+                    
                 }catch{
                     print(error.localizedDescription)
                     debugPrint(error)
-
-                    //complication(.failure(error))
                 }
             }
             task.resume()
         }
     }
-  public func getRecommendationGenres(complication:@escaping ((Result<RecommendationGenresResponse,Error>))-> Void){
+    // MARK : To get available-genre-seeds
+    
+    public func getRecommendationGenres(complication:@escaping ((Result<RecommendationGenresResponse,Error>))-> Void){
         createRequest(with: URL(string: constant.baseAPIurl + "/recommendations/available-genre-seeds"), type: .GET) { request in
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let data = data , error == nil else {
@@ -52,19 +98,22 @@ final class APIManager {
                     return
                 }
                 do{
-                //let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     let json = try JSONDecoder().decode(RecommendationGenresResponse.self, from: data)
                     complication(.success(json))
                 }catch{
                     print(error.localizedDescription)
                     debugPrint(error)
-
+                    
                     complication(.failure(error))
                 }
             }
             task.resume()
         }
     }
+    
+    // MARK : To get featured-playlists
+    
+    
     public func getFeaturedPlaylist(complication:@escaping ((Result<FeaturedPlaylistResponse,Error>)) -> Void){
         createRequest(with: URL(string:constant.baseAPIurl + "/browse/featured-playlists?limit=20"), type: .GET) { request in
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -73,11 +122,11 @@ final class APIManager {
                     return
                 }
                 do{
-                   //let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                   let json = try JSONDecoder().decode(FeaturedPlaylistResponse.self, from: data)
+                    //let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    let json = try JSONDecoder().decode(FeaturedPlaylistResponse.self, from: data)
                     print(json)
                     complication(.success(json))
-
+                    
                 }catch{
                     debugPrint(error)
                     print(error as Any)
@@ -90,6 +139,7 @@ final class APIManager {
         }
         
     }
+    // MARK - Release
     public func getNewRelease(complication:@escaping ((Result<NewRealseResponse,Error>)) -> Void) {
         let str = constant.baseAPIurl + "/browse/new-releases?limit=8"
         createRequest(with: URL(string: str), type: .GET) { request in
@@ -100,21 +150,22 @@ final class APIManager {
                 }
                 
                 do {
-                  // let result = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    // let result = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     let result = try JSONDecoder().decode(NewRealseResponse.self, from: data)
                     complication(.success(result))
                 }catch{
                     print(error.localizedDescription)
                     debugPrint(error)
-
+                    
                     complication(.failure(error))
-
+                    
                 }
             }
             task.resume()
         }
         
     }
+    // MARK - Profile
     public func getcurrentUserProfile(complication: @escaping (Result<UserProfile, Error>)-> Void)
     {
         createRequest(with:URL (string: constant.baseAPIurl + "/me"), type: .GET) { baseRequest in
@@ -124,20 +175,20 @@ final class APIManager {
                     return
                 }
                 do{
-                   // let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    // let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     let json = try JSONDecoder().decode(UserProfile.self, from: data)
                     complication(.success(json))
                 }catch{
                     print(error.localizedDescription)
                     debugPrint(error)
-
+                    
                     complication(.failure(error))
                 }
                 
             }
             task.resume()
         }
-       
+        
     }
     //MARK - Private
     enum HTTPMethods:String {
@@ -158,6 +209,6 @@ final class APIManager {
             
         }
         
-       
+        
     }
 }

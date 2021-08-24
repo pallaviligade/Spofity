@@ -14,7 +14,9 @@ enum BrowsSectionType {
 }
 
 class HomeViewController: UIViewController {
-    
+    private var NewAlbum : [Album] = []
+    private var playlist: [Playlist] = []
+    private var tracks: [AudioTrack] = []
     private var collectionView:UICollectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewCompositionalLayout { SectionIndex, _ -> NSCollectionLayoutSection? in
@@ -143,10 +145,11 @@ class HomeViewController: UIViewController {
     }
    
   }
+   
     private func configaureModels(NewAlbum:[Album],playlist:[Playlist],tracks:[AudioTrack]){
-        print(NewAlbum.count)
-        print(playlist.count)
-        print(tracks.count)
+        self.NewAlbum = NewAlbum
+        self.playlist = playlist
+        self.tracks = tracks
         // convert every model into viewmodel using compact
         sections.append(.newRelease(viewModel: NewAlbum.compactMap({
             return NewReleaseCellViewModel(name: $0.name, artworkURL: URL(string: $0.images.first?.url ?? ""), numberofTracks: $0.total_tracks, artistName: $0.artists.first?.name ?? "-")
@@ -155,7 +158,7 @@ class HomeViewController: UIViewController {
             return FeaturedPlaylistViewModel(name: $0.name, artworkURL: URL(string: $0.images.first?.url ?? ""), creatorName: $0.owner.display_name)
         })))
         sections.append(.recommendedTrack(viewModel: tracks.compactMap({
-            return RecommendedTrackCellViewModel(name: $0.name, artistName: $0.artists.first?.name ?? "-", artworkURL: URL(string: $0.album.images.first?.url ?? ""))
+            return RecommendedTrackCellViewModel(name: $0.name, artistName: $0.artists.first?.name ?? "-", artworkURL: URL(string: $0.album?.images.first?.url ?? ""))
         })))
         collectionView.reloadData()
     }
@@ -267,6 +270,30 @@ extension HomeViewController:UICollectionViewDelegate,UICollectionViewDataSource
                   // section
                   let section = NSCollectionLayoutSection(group: group)
                   return section
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+       
+         let section = sections[indexPath.section]
+            
+        
+        switch section {
+            case .newRelease:
+                let album = NewAlbum[indexPath.row]
+                let vc = AlbumViewController(album: album)
+                vc.title = album.name
+                vc.navigationItem.largeTitleDisplayMode = .never
+                self.navigationController?.pushViewController(vc, animated: true)
+                break
+            case .featuredPlaylist:
+                let playlist = playlist[indexPath.row]
+                let vc = PlaylistViewController(playList: playlist)
+                vc.title = playlist.name
+                vc.navigationItem.largeTitleDisplayMode = .never
+                self.navigationController?.pushViewController(vc, animated: true)
+                break
+            case .recommendedTrack:
+                break
         }
     }
 }
